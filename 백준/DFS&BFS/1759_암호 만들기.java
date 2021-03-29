@@ -27,7 +27,7 @@ public class BOJ_1759 {
 	}
 	
 	public static void dfs(String pwd, int i) {
-		if(pwd.length() == C && check(pwd)) {
+		if(pwd.length() == L && check(pwd)) {
 			System.out.println(pwd);
 			return;
 		}

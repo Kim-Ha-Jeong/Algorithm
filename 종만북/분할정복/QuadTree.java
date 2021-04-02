@@ -1,53 +1,37 @@
 import java.io.*;
 
 public class QuadTree {
-	static int arr[][], m;
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static String s;
+	static int head = 0;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		int n = Integer.parseInt(br.readLine());
-		arr = new int[n][n];
+		int C = Integer.parseInt(br.readLine());
 		
-		for(int i=0; i<n; i++) {
-			String s[] = br.readLine().split("");
-			for(int j=0; j<n; j++)
-				arr[i][j] = Integer.parseInt(s[j]);
+		for(int i=0; i<C; i++) {
+			head = 0;
+			s = br.readLine();
+			
+			System.out.println(reverse());
 		}
-		
-		quadTree(0,0,n);
-		
-		bw.flush();
-		bw.close();
 		
 	}
 	
-	static void quadTree(int y, int x,int size) throws Exception {
-		if(check(y,x,size))
-			bw.write(m+"");
-		else {
-			bw.write("(");
-			size /= 2;
-			
-			for(int i=0; i<2; i++) {
-				for(int j=0; j<2; j++)
-					quadTree(y+size*i, x+size*j, size);
-			}
-			
-			bw.write(")");
-		}
-	}
-	
-	static boolean check(int y, int x, int size) {
-		for(int i=y; i<y+size; i++) {
-			for(int j=x; j<x+size; j++) {
-				if(arr[y][x] != arr[i][j])
-					return false;
-			}
-		}
+	static String reverse() {
 		
-		m = arr[y][x];
-		return true;
+		if(s.charAt(head)!='x'){
+			head++;
+			return s.charAt(head-1)+"";
+		} 
+		
+		head++;
+		String str[] = new String[4];
+		str[0] = reverse();
+		str[1] = reverse();
+		str[2] = reverse();
+		str[3] = reverse();
+		
+		return "x"+str[2]+str[3]+str[0]+str[1];
 	}
 
 }

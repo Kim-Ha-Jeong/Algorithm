@@ -1,91 +1,81 @@
-import java.util.*;
-import java.io.*;
-
-public class BOJ_2206 {
-	static int dx[] = { -1, 0, 1, 0 };
-	static int dy[] = { 0, -1, 0, 1 };
-	static int n, m, map[][], dist[][][];
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Queue;
+import java.util.LinkedList;
+public class Bruteforce_12 {
+	static int[][] map;
+	static int[][][] dist;
+	static int[] dx = {0,0,1,-1};
+	static int[] dy = {1,-1,0,0};
+	static int n,m;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		String st[] = br.readLine().split(" ");
-		n = Integer.parseInt(st[0]);
-		m = Integer.parseInt(st[1]);
+		String[] s = br.readLine().split(" ");
+		
+		n = Integer.parseInt(s[0]);
+		m = Integer.parseInt(s[1]);
 		map = new int[n][m];
 		dist = new int[n][m][2];
-
-		for (int i = 0; i < n; i++) {
-			String s[] = br.readLine().split("");
-			for (int j = 0; j < m; j++)
+		
+		for(int i=0; i<n; i++) {
+			s = br.readLine().split("");
+			for(int j=0; j<m; j++) {
 				map[i][j] = Integer.parseInt(s[j]);
+			}
 		}
-
-		breakWall();
-
+		
+		System.out.println(bfs());
+		
 	}
-
-	static void breakWall() {
-		int res = -1;
+	
+	static int bfs() {
 		Queue<Node> q = new LinkedList<>();
-
-		q.add(new Node(0, 0, 0, 0));
+		q.add(new Node(0,0,0,0));
 		dist[0][0][0] = 0;
-
-		while (!q.isEmpty()) {
-			Node d = q.poll();
-
-			if (d.x == n - 1 && d.y == m - 1) {
-				res = dist[d.x][d.y][d.w];
-				if(res != -1)
-					res++;
+		int ret = -1;
+		
+		while(!q.isEmpty()) {
+			Node cur = q.poll();
+			
+			if(cur.x == n-1 && cur.y == m-1) {
+				ret = cur.cnt+1;
 				break;
 			}
-
-			if (d.w < 1) {
-				for (int i = 0; i < 4; i++) {
-					int nx = d.x + dx[i];
-					int ny = d.y + dy[i];
-
-					if (nx < 0 || nx >= n || ny < 0 || ny >= m)
-						continue;
-
-					if (map[nx][ny] == 1 && dist[nx][ny][d.w + 1] == 0) {
-						dist[nx][ny][d.w+1] = d.cnt + 1;
-						q.add(new Node(nx, ny, d.w + 1, d.cnt + 1));
+			
+			for(int i=0; i<4; i++) {
+				int nx = cur.x + dx[i];
+				int ny = cur.y + dy[i];
+				
+				if(nx < 0 || ny < 0 || nx>=n || ny>= m)
+					continue;
+				
+				if(cur.wallBreak < 1) {
+					if(map[nx][ny] == 1 && dist[nx][ny][cur.wallBreak+1] == 0) {
+						dist[nx][ny][cur.wallBreak+1] = cur.cnt+1;
+						q.add(new Node(nx,ny,cur.cnt+1, cur.wallBreak+1));
 					}
 				}
-			}
-
-			for (int i = 0; i < 4; i++) {
-				int nx = d.x + dx[i];
-				int ny = d.y + dy[i];
-
-				if (nx < 0 || ny < 0 || nx >= n || ny >= m)
-					continue;
-
-				if (map[nx][ny] != 1 && dist[nx][ny][d.w] == 0) {
-					dist[nx][ny][d.w] = d.cnt + 1;
-					q.add(new Node(nx, ny, d.w, d.cnt + 1));
+				
+				if(map[nx][ny] == 0 && dist[nx][ny][cur.wallBreak] == 0) {
+					dist[nx][ny][cur.wallBreak] = cur.cnt+1;
+					q.add(new Node(nx, ny, cur.cnt+1, cur.wallBreak));
 				}
 			}
 		}
-
-		System.out.println(res);
-
+		
+		return ret;
 	}
 
 	static class Node {
 		int x;
 		int y;
-		int w;
 		int cnt;
-
-		Node(int x, int y, int w, int cnt) {
+		int wallBreak;
+		Node(int x, int y, int cnt, int wallBreak){
 			this.x = x;
 			this.y = y;
-			this.w = w;
 			this.cnt = cnt;
+			this.wallBreak = wallBreak;
 		}
 	}
 }

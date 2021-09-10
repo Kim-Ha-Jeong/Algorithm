@@ -1,73 +1,84 @@
-package study;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Collections;
+import java.util.Queue;
 
-import java.io.*;
-import java.util.*;
-
-public class DfsBfs {
-	static int n, m, v;
+public class BOJ_1260 {
 	static ArrayList<Integer>[] list;
-	static boolean visited[];
-
+	static boolean[] v;
+	static int n, m;
+	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
 		String[] s = br.readLine().split(" ");
 		n = Integer.parseInt(s[0]);
 		m = Integer.parseInt(s[1]);
-		v = Integer.parseInt(s[2]);
-
+		int start = Integer.parseInt(s[2]);
 		list = new ArrayList[n+1];
-		visited = new boolean[n + 1];
+		v = new boolean[n+1];
 		
-		for(int i=1; i<n+1; i++)
+		for(int i=1; i<n+1; i++) {
 			list[i] = new ArrayList<Integer>();
-
-		for (int i = 0; i < m; i++) {
-			String str[] = br.readLine().split(" ");
-			int a = Integer.parseInt(str[0]);
-			int b = Integer.parseInt(str[1]);
+		}
+		
+		for(int i=0; i<m; i++) {
+			s = br.readLine().split(" ");
+			int a = Integer.parseInt(s[0]);
+			int b = Integer.parseInt(s[1]);
 			list[a].add(b);
 			list[b].add(a);
 		}
 		
-		for(int i=1; i<n+1; i++)
+		for(int i=1; i<n+1; i++) {
 			Collections.sort(list[i]);
-
-		dfs(v);
-		System.out.println();
-		bfs();
+		}
+		
+		dfs(start);
+		sb.append("\n");
+		Arrays.fill(v, false);
+		bfs(start);
+		
+		bw.write(sb.toString());
+		bw.flush();
+		bw.close();
 	}
-
-	public static void dfs(int vertex) {
-		visited[vertex] = true;
-
-		System.out.print(vertex + " ");
-
-		for (int i : list[vertex]) {
-			if (!visited[i]) {
+	
+	static void dfs(int start) {
+		v[start] = true;
+		
+		sb.append(start+" ");
+		
+		for(int i : list[start]) {
+			if(!v[i]) {
 				dfs(i);
 			}
 		}
 	}
-
-	public static void bfs() {
-		for (int i = 1; i < n + 1; i++)
-			visited[i] = false;
-
+	
+	static void bfs(int start) {
 		Queue<Integer> q = new LinkedList<>();
-		q.add(v);
-
-		while (!q.isEmpty()) {
-			int vertex = q.poll();
-			visited[vertex] = true;
-
-			for (int i : list[vertex]) {
-				if (!visited[i]) {
-					visited[i] = true;
+		v[start] = true;
+		q.add(start);
+		
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			
+			sb.append(cur+" ");
+			
+			for(int i: list[cur]) {
+				if(!v[i]) {
+					v[i] = true;
 					q.add(i);
 				}
 			}
-
-			System.out.print(vertex + " ");
 		}
 	}
+
 }

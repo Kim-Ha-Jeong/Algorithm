@@ -1,64 +1,69 @@
-package study;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Queue;
+import java.util.LinkedList;
 
-import java.io.*;
-import java.util.*;
-
-public class Maze {
+public class BOJ_2178 {
+	static int[][] map;
+	static int[] dx = {0,0,1,-1};
+	static int[] dy = {1,-1,0,0};
 	static int n, m;
-	static int[][] maze;
-	static boolean[][] visited;
-	static int min;
-	static int dx[] = { -1, 0, 1, 0 };
-	static int dy[] = { 0, -1, 0, 1 };
-
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] str = br.readLine().split(" ");
-
-		n = Integer.parseInt(str[0]);
-		m = Integer.parseInt(str[1]);
-		maze = new int[n + 1][m + 1];
-		visited = new boolean[n+1][m+1];
-		min = n * m;
-		int count = 0;
-
-		for (int i = 1; i < n + 1; i++) {
-			String[] s = br.readLine().split("");
-			for (int j = 1; j < m + 1; j++)
-				maze[i][j] = Integer.parseInt(s[j-1]);
+		
+		String[] s = br.readLine().split(" ");
+		n = Integer.parseInt(s[0]);
+		m = Integer.parseInt(s[1]);
+		map = new int[n][m];
+		
+		for(int i=0; i<n; i++) {
+			s = br.readLine().split("");
+			for(int j=0; j<m; j++) {
+				map[i][j] = Integer.parseInt(s[j]);
+			}
 		}
 		
-		bfs();
-		
-		System.out.println(maze[n][m]);
+		bfs(0, 0);
 	}
 
-	public static void bfs() {
-		Queue<Node> q = new LinkedList<>();
-		int nx, ny;
-		q.add(new Node(1,1));
-		visited[1][1] = true;
+	static void bfs(int x, int y) {
+		Queue<Node> q = new LinkedList<Node>();
+		q.add(new Node(x,y,0));
+		map[x][y] = 0;
+		
+		while(!q.isEmpty()) {
 
-		while (!q.isEmpty()) {
-			Node a = q.poll();
+			Node cur = q.poll();
+			
+			if(cur.x == n-1 && cur.y == m-1) {
+				System.out.println(cur.cnt+1);
+				return;
+			}
 			
 			for(int i=0; i<4; i++) {
-				nx = a.x+dx[i];
-				ny = a.y+dy[i];
+				int nx = cur.x + dx[i];
+				int ny = cur.y + dy[i];
 				
-				if(nx<0 || ny<0 || nx>=n+1 || ny>=m+1) 
+				if(nx < 0 || nx >= n || ny <0 || ny >= m)
 					continue;
 				
-				if(maze[nx][ny] == 0 || visited[nx][ny])
-					continue;
-				
-				maze[nx][ny] = maze[a.x][a.y] + 1;
-				visited[nx][ny] = true;
-				q.add(new Node(nx, ny));
-			
+				if(map[nx][ny] == 1) {
+					map[nx][ny] = 0;
+					q.add(new Node(nx, ny, cur.cnt+1));
+				}
 			}
-
+		}
+		
+	}
+	
+	static class Node{
+		int x;
+		int y;
+		int cnt;
+		Node(int x, int y, int cnt){
+			this.x = x;
+			this.y = y;
+			this.cnt = cnt;
 		}
 	}
-
 }

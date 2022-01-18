@@ -7,7 +7,6 @@ import java.util.Comparator;
 public class BOJ_1713 {
     static int n, all;
     static int[] arr;
-    static int[] frame;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,18 +14,17 @@ public class BOJ_1713 {
         n = Integer.parseInt(br.readLine());
         all = Integer.parseInt(br.readLine());
         arr = new int[all];
-        frame = new int[n];
 
         String[] s = br.readLine().split(" ");
         for (int i = 0; i < all; i++) {
             arr[i] = Integer.parseInt(s[i]);
         }
 
-        bfs();
+        solve();
 
     }
 
-    static void bfs() {
+    static void solve() {
         LinkedList<Student> list = new LinkedList<>();
         int idx = 0;
         int age = 0;
@@ -54,12 +52,7 @@ public class BOJ_1713 {
             }
         }
 
-        Collections.sort(list, new Comparator<Student>() {
-            @Override
-            public int compare(Student s1, Student s2) {
-                return s1.num - s2.num;
-            }
-        });
+        Collections.sort(list, Comparator.comparingInt(s -> s.num));
 
         for (int i = 0; i < list.size(); i++) {
             System.out.print(list.get(i).num);

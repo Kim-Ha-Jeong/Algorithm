@@ -29,18 +29,27 @@ public class BOJ_2805 {
         }
 
         int low = 0;
+        int ans = 0;
         int mid;
 
-        while (low + 1 < high) {
+        while (true) {
             mid = (low + high) / 2;
-            if (cal(mid) >= m) {
-                low = mid;
+            long sum = cal(mid);
+            if (sum == m) {
+                ans = mid;
+                break;
+            } else if (sum < m) {
+                high = mid - 1;
             } else {
-                high = mid;
+                low = mid + 1;
+                ans = mid;
             }
+
+            if (low > high)
+                break;
         }
 
-        sb.append(low);
+        sb.append(ans);
 
         bw.write(sb.toString());
         bw.flush();

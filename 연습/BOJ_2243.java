@@ -17,7 +17,7 @@ public class BOJ_2243 {
 
         int n = Integer.parseInt(st.nextToken());
 
-        while (s < max) {
+        while (s < max) { // s값 구하기
             s *= 2;
         }
         tree = new long[s * 2];

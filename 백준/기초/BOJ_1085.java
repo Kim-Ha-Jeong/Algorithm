@@ -15,6 +15,8 @@ public class BOJ_1085 {
 
 		System.out.println(Math.min(minX, minY));
 
+		sc.close();
+
 	}
 
 }

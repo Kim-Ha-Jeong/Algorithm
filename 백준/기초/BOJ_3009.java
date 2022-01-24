@@ -12,25 +12,26 @@ public class BOJ_3009 {
 			for (int j = 0; j < 2; j++)
 				arr[i][j] = sc.nextInt();
 		}
-		
-		for(int i=1; i<3; i++) {
-			if(arr[0][0] == arr[i][0]) 
-				flagX = 3-i;
-			
-			if(arr[0][1] == arr[i][1]) 
-				flagY = 3-i;
+
+		for (int i = 1; i < 3; i++) {
+			if (arr[0][0] == arr[i][0])
+				flagX = 3 - i;
+
+			if (arr[0][1] == arr[i][1])
+				flagY = 3 - i;
 		}
-		
-		if(flagX == -1)
-			System.out.print(arr[0][0]+" ");
+
+		if (flagX == -1)
+			System.out.print(arr[0][0] + " ");
 		else
-			System.out.print(arr[flagX][0]+" ");
-		
-		if(flagY == -1)
-			System.out.print(arr[0][1]+" ");
+			System.out.print(arr[flagX][0] + " ");
+
+		if (flagY == -1)
+			System.out.print(arr[0][1] + " ");
 		else
-			System.out.print(arr[flagY][1]+" ");
-		
+			System.out.print(arr[flagY][1] + " ");
+
+		sc.close();
 
 	}
 

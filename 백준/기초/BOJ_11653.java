@@ -11,6 +11,8 @@ public class BOJ_11653 {
 			prime(i);
 		}
 
+		sc.close();
+
 	}
 
 	public static void prime(int i) {

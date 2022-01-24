@@ -1,5 +1,4 @@
 import java.io.*;
-import java.math.*;
 
 public class BOJ_1011 {
 	public static void main(String[] args) throws Exception {

@@ -9,8 +9,10 @@ public class BOJ_10757 {
 		String BB = sc.next();
 		BigInteger A = new BigInteger(AA);
 		BigInteger B = new BigInteger(BB);
-		
+
 		System.out.println(A.add(B));
+
+		sc.close();
 	}
 
 }

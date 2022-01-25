@@ -1,40 +1,116 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class BOJ_11438 {
-    static int[] parent;
+    static int[][] parent;
+    static int k = 0, n, m;
+    static ArrayList<Integer>[] list;
+    static int[] depth;
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuffer sb = new StringBuffer();
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        parent = new int[n + 1];
+        n = Integer.parseInt(st.nextToken());
+
+        getLog();
+
+        parent = new int[k + 1][n + 1];
+        list = new ArrayList[n + 1];
+        depth = new int[n + 1];
 
         for (int i = 1; i < n + 1; i++) {
-            parent[i] = i;
+            list[i] = new ArrayList<>();
         }
 
+        int a, b;
         for (int i = 0; i < n - 1; i++) {
             st = new StringTokenizer(br.readLine());
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
 
-            union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+            list[a].add(b);
+            list[b].add(a);
         }
 
-        System.out.println();
+        bfs(1);
+        setParent();
+
+        m = Integer.parseInt(br.readLine());
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+
+            sb.append(LCA(a, b)).append("\n");
+        }
+
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();
     }
 
-    static void union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
-
-        parent[rootA] = rootB;
+    static void getLog() {
+        for (int i = 1; i < n; i *= 2)
+            k++;
     }
 
-    static int find(int a) {
-        if (a == parent[a])
+    static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        depth[start] = 1;
+        q.add(start);
+
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            for (int next : list[now]) {
+                if (depth[next] == 0) {
+                    depth[next] = depth[now] + 1;
+                    parent[0][next] = now;
+                    q.add(next);
+                }
+            }
+        }
+    }
+
+    static void setParent() {
+        for (int i = 1; i < k + 1; i++) {
+            for (int j = 1; j < n + 1; j++) {
+                parent[i][j] = parent[i - 1][parent[i - 1][j]];
+            }
+        }
+    }
+
+    static int LCA(int a, int b) {
+        if (depth[a] < depth[b])
+            return LCA(b, a);
+
+        for (int i = 0; i < k + 1; i++) {
+            if (((depth[a] - depth[b]) & (1 << i)) >= 1) {
+                a = parent[i][a];
+            }
+        }
+
+        if (a == b)
             return a;
-        return parent[a] = find(parent[a]);
+
+        for (int i = k; i >= 0; i--) {
+            if (parent[i][a] != parent[i][b]) {
+                a = parent[i][a];
+                b = parent[i][b];
+            }
+        }
+
+        return parent[0][a];
+
     }
+
 }

@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class BOJ_11438 {
-    static int[][] parent;
-    static int k = 0, n, m;
+public class BOJ_11437 {
+
+    static int n, m, k = 0;
     static ArrayList<Integer>[] list;
+    static int[][] parent;
     static int[] depth;
 
     @SuppressWarnings("unchecked")
@@ -21,10 +22,6 @@ public class BOJ_11438 {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n = Integer.parseInt(st.nextToken());
-
-        getLog();
-
-        parent = new int[k + 1][n + 1];
         list = new ArrayList[n + 1];
         depth = new int[n + 1];
 
@@ -42,10 +39,13 @@ public class BOJ_11438 {
             list[b].add(a);
         }
 
+        getLog();
+        parent = new int[k + 1][n + 1];
         bfs(1);
         setParent();
 
         m = Integer.parseInt(br.readLine());
+
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             a = Integer.parseInt(st.nextToken());
@@ -57,28 +57,12 @@ public class BOJ_11438 {
         bw.write(sb.toString());
         bw.flush();
         bw.close();
+
     }
 
     static void getLog() {
         for (int i = 1; i < n; i *= 2)
             k++;
-    }
-
-    static void bfs(int start) {
-        Queue<Integer> q = new LinkedList<>();
-        depth[start] = 1;
-        q.add(start);
-
-        while (!q.isEmpty()) {
-            int now = q.poll();
-            for (int next : list[now]) {
-                if (depth[next] == 0) {
-                    depth[next] = depth[now] + 1;
-                    parent[0][next] = now;
-                    q.add(next);
-                }
-            }
-        }
     }
 
     static void setParent() {
@@ -87,10 +71,30 @@ public class BOJ_11438 {
                 parent[i][j] = parent[i - 1][parent[i - 1][j]];
             }
         }
+
+    }
+
+    static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        depth[start] = 1;
+
+        while (!q.isEmpty()) {
+            int now = q.poll();
+
+            for (int next : list[now]) {
+                if (depth[next] != 0)
+                    continue;
+
+                depth[next] = depth[now] + 1;
+                parent[0][next] = now;
+                q.add(next);
+            }
+        }
     }
 
     static int LCA(int a, int b) {
-        if (depth[a] < depth[b])
+        if (depth[b] > depth[a])
             return LCA(b, a);
 
         for (int i = k; i >= 0; i--) {
@@ -98,14 +102,6 @@ public class BOJ_11438 {
                 a = parent[i][a];
             }
         }
-
-        /*
-         * for(int i=0; i<k+1; i++){
-         * if((depth[a]-depth[b])&(1<<i) >= 1){
-         * a = parent[a];
-         * }
-         * }
-         */
 
         if (a == b)
             return a;
@@ -118,7 +114,5 @@ public class BOJ_11438 {
         }
 
         return parent[0][a];
-
     }
-
 }

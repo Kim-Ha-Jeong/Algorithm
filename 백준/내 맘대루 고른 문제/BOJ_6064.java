@@ -12,25 +12,28 @@ public class BOJ_6064 {
 
         int tc = Integer.parseInt(br.readLine());
 
+        StringTokenizer st;
+
         while (tc-- > 0) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
+            st = new StringTokenizer(br.readLine());
             int m = Integer.parseInt(st.nextToken());
             int n = Integer.parseInt(st.nextToken());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            int cnt = 0;
 
             if (x == y) {
                 sb.append(x).append("\n");
                 continue;
             }
 
-            int limit = LCM(Math.max(m, n), Math.min(m, n));
             int ans = -1;
+            int cnt = 0;
 
-            while (cnt * m < limit) {
-                if ((cnt * m + x - y) % n == 0) {
-                    ans = cnt * m + x;
+            int limit = LCM(Math.max(m, n), Math.min(m, n));
+
+            while (cnt * n < limit) {
+                if ((cnt * n + y - x) % m == 0) {
+                    ans = cnt * n + y;
                     break;
                 }
                 cnt++;
@@ -45,16 +48,16 @@ public class BOJ_6064 {
     }
 
     static int LCM(int a, int b) {
-        int originA = a;
-        int originB = b;
+        int mul = a * b;
 
+        int r = -1;
         while (b != 0) {
-            int r = a % b;
+            r = a % b;
             a = b;
             b = r;
         }
 
-        return originA * originB / a;
+        return mul / a;
     }
 
 }

@@ -1,19 +1,20 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-public class BOJ_1922 {
-    static int n, m, ans = 0;
-    static PriorityQueue<Edge> pq = new PriorityQueue<>();
+class BOJ_1922 {
+    static int n, m, cnt = 0, ans = 0;
+    static PriorityQueue<Edge> pq;
     static int[] parent;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
         StringBuffer sb = new StringBuffer();
+        StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
         m = Integer.parseInt(br.readLine());
+        pq = new PriorityQueue<>();
         parent = new int[n + 1];
 
         for (int i = 1; i < n + 1; i++) {
@@ -26,31 +27,17 @@ public class BOJ_1922 {
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
 
+            if (a == b)
+                continue;
+
             pq.add(new Edge(a, b, c));
         }
 
-        solve();
+        dijkstra();
 
         bw.write(sb.append(ans).toString());
         bw.flush();
         bw.close();
-    }
-
-    static void solve() {
-
-        while (!pq.isEmpty()) {
-            Edge e = pq.poll();
-
-            int start = e.start;
-            int end = e.end;
-
-            if (find(start) == find(end))
-                continue;
-
-            union(start, end);
-            ans += e.cost;
-
-        }
     }
 
     static int find(int x) {
@@ -63,13 +50,23 @@ public class BOJ_1922 {
         int rootA = find(a);
         int rootB = find(b);
 
-        if (rootB > rootA) {
-            int tmp = rootB;
-            rootB = rootA;
-            rootA = tmp;
-        }
+        parent[rootA] = rootB;
+    }
 
-        parent[rootB] = rootA;
+    static void dijkstra() {
+        while (!pq.isEmpty()) {
+            Edge e = pq.poll();
+
+            if (find(e.start) == find(e.end))
+                continue;
+
+            union(e.start, e.end);
+            ans += e.cost;
+            cnt++;
+
+            if (cnt == n - 1)
+                return;
+        }
     }
 
     static class Edge implements Comparable<Edge> {
@@ -88,5 +85,4 @@ public class BOJ_1922 {
             return this.cost - e.cost;
         }
     }
-
 }

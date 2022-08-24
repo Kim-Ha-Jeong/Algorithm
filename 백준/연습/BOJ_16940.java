@@ -8,6 +8,7 @@ public class BOJ_16940 {
     static int[] visited;
     static int ans = 1;
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));

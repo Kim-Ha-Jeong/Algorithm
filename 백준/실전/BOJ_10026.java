@@ -11,7 +11,6 @@ public class BOJ_10026 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
         StringBuffer sb = new StringBuffer();
 
         n = Integer.parseInt(br.readLine());
